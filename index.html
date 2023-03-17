@@ -13,6 +13,7 @@
     <button id="bnt2" scctag="gggg|ffff">scctag上报</button>
     <button id="bnt3">js手动上报</button>
     <button id="bnt4">无scctag上报</button>
+    <button id="bnt6">模拟错判上报</button>
   </body>
   <script src="./dist/index.js"></script>
   <script>
@@ -26,7 +27,11 @@
       history.pushState("xxx", "ccc", "vvv")
     })
     bnt3.addEventListener("click", () => {
+      console.log(ccc)
       track.sendTracker({ name: "手动上报" })
+    })
+    bnt6.addEventListener("click", () => {
+      console.log(ccc)
     })
   </script>
 </html>

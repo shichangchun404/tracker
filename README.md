@@ -37,7 +37,7 @@ npx tsc --init
 > 1 pv 数据 要监听页面 url 变化 单页应用时要重写 history 上的几个方法
 > 2 数据发送通过 navigator.sendBeacon(页面关闭也会发送请求)。 而不是通过传统的 fetch/XHR
 > 3 DOM 事件监听通过自定义 scctag 属性设置
-> 4 错误上报通过监听 window 的 erro 及 promise 的 unhandledrejection 事件
+> 4 错误上报通过监听 window 的 error 及 promise 的 unhandledrejection 事件
 
 ### 使用
 
