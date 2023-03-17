@@ -2,13 +2,20 @@
   "name": "scc-tracker",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "broswer": "dist/index.js",
   "scripts": {
     "build": "rollup -c --bundleConfigAsCjs",
     "server": "node server.ts"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "埋点"
+  ],
+  "author": "shichangchun",
+  "files": [
+    "dist"
+  ],
   "license": "ISC",
   "devDependencies": {
     "express": "^4.18.2",

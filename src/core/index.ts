@@ -35,31 +35,54 @@ export default class Tracker {
     return {
       uuid: "",
       requestUrl: "",
+      sdkVersion: TrackerConfig.version,
+      extra: undefined,
       historyTracker: true,
       hashTracker: false,
       domTracker: true,
-      sdkVersion: TrackerConfig.version,
-      extra: undefined,
       jsError: true,
     }
   }
 
+  // 根据配置 监听数据上报场景
   private initTracker() {
     if (this.data.historyTracker) {
-      this.captureEvents(["pushState", "replaceState"], "history-pv")
+      this.registerHistoryEventListener(
+        ["pushState", "replaceState"],
+        "history-pv"
+      )
     }
     if (this.data.hashTracker) {
-      this.captureEvents(["hashchange"], "hash-pv")
+      this.registerHistoryEventListener(["hashchange"], "hash-pv")
     }
     if (this.data.domTracker) {
-      this.registerDomEvent()
+      this.registerDomEventListener()
+    }
+    if (this.data.jsError) {
+      this.registerErrorListener()
     }
   }
 
-  private captureEvents<T>(eventList: string[], targetKey: string, data?: T) {
+  // 数据上报 通过navigator.sendBeacon
+  private reportTracker<T>(data?: T) {
+    const params = Object.assign(this.data, data, {
+      time: new Date().getTime(),
+    })
+    const headers = {
+      type: "application/x-www-form-urlencoded",
+    }
+    const blob = new Blob([JSON.stringify(params)], headers)
+    navigator.sendBeacon(this.data.requestUrl, blob)
+  }
+
+  // 路由事件监听
+  private registerHistoryEventListener<T>(
+    eventList: string[],
+    targetKey: string,
+    data?: T
+  ) {
     eventList.forEach((eventName) => {
       window.addEventListener(eventName, () => {
-        console.log(`事件${eventName}触发了`)
         this.reportTracker({
           eventName,
           targetKey,
@@ -69,21 +92,8 @@ export default class Tracker {
     })
   }
 
-  // 数据上报 通过navigator.sendBeacon
-  private reportTracker<T>(data?: T) {
-    const params = Object.assign(this.data, data, {
-      time: new Date().getTime(),
-    })
-    console.log("reportTracker params ", params)
-    const headers = {
-      type: "application/x-www-form-urlencoded",
-    }
-    const blob = new Blob([JSON.stringify(params)], headers)
-    navigator.sendBeacon(this.data.requestUrl, blob)
-  }
-
   // 注册dom点击事件上报
-  private registerDomEvent() {
+  private registerDomEventListener() {
     mouseEventList.forEach((eventName) => {
       window.addEventListener(eventName, (e) => {
         const target = e.target as HTMLElement
@@ -94,6 +104,24 @@ export default class Tracker {
             targetKey,
           })
         }
+      })
+    })
+  }
+
+  // 监听错误事件
+  private registerErrorListener() {
+    window.addEventListener("error", (e) => {
+      this.reportTracker({
+        eventName: "error",
+        message: e.message,
+      })
+    })
+    window.addEventListener("unhandledrejection", (e) => {
+      e.promise.catch((message) => {
+        this.reportTracker({
+          eventName: "error",
+          message,
+        })
       })
     })
   }

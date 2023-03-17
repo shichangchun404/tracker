@@ -8,13 +8,13 @@
  * @jsError js 和 promise 报错异常上报
  */
 export interface IDefaultOptons {
+  sdkVersion: string | number
   uuid: string | undefined
   requestUrl: string | undefined
+  extra: Record<string, any> | undefined
   historyTracker: boolean
   hashTracker: boolean
   domTracker: boolean
-  sdkVersion: string | number
-  extra: Record<string, any> | undefined
   jsError: boolean
 }
 
