@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <a href="#aaa">aaa</a>
+    <a href="#ccc">ccc</a>
+    <button id="bnt1">点我看看</button>
+    <button id="bnt2" scctag="gggg|ffff">scctag上报</button>
+    <button id="bnt3">无scctag上报</button>
+  </body>
+  <script src="./dist/index.js"></script>
+  <script>
+    console.log("SccTracker", SccTracker)
+    const track = new SccTracker({
+      requestUrl: " http://localhost:8888/api/tracker",
+      hashTracker: true,
+      uuid: "uuid_xxxx",
+    })
+
+    bnt1.addEventListener("click", () => {
+      history.pushState("xxx", "ccc", "vvv")
+    })
+  </script>
+</html>
