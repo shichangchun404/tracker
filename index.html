@@ -11,11 +11,11 @@
     <a href="#ccc">ccc</a>
     <button id="bnt1">点我看看</button>
     <button id="bnt2" scctag="gggg|ffff">scctag上报</button>
-    <button id="bnt3">无scctag上报</button>
+    <button id="bnt3" scctag="gggg|ffff">js手动上报</button>
+    <button id="bnt4">无scctag上报</button>
   </body>
   <script src="./dist/index.js"></script>
   <script>
-    console.log("SccTracker", SccTracker)
     const track = new SccTracker({
       requestUrl: " http://localhost:8888/api/tracker",
       hashTracker: true,
@@ -24,6 +24,9 @@
 
     bnt1.addEventListener("click", () => {
       history.pushState("xxx", "ccc", "vvv")
+    })
+    bnt3.addEventListener("click", () => {
+      track.sendTracker({ name: "手动上报" })
     })
   </script>
 </html>
